@@ -1,42 +1,61 @@
 'use strict';
 
 window.renderStatistics = function (ctx, names, times) {
-  var maxTime = times[0];
-  var chartDeviderConst;// постоянная - пропорция для отрисовки диаграммы
-  // Сздаем квадратное облако для вывода результата
+  // Вводные данные задания module2-task1:
+  var heightDiagram = 150;
+  var message = 'Ура Вы победили!\nСписок результатов:';
+  var barWidth = 40;
+  var spaceBetweenBar = 50;
+  var currentPlayerName = 'Вы';
+  var mainResultsX = 110;
+  var mainResultsY = 20;
   ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-  ctx.fillRect(110, 20, 420, 270);
+  ctx.fillRect(mainResultsX, mainResultsY, 420, 270);
   ctx.fillStyle = 'white';
-  ctx.fillRect(100, 10, 420, 270);
+  ctx.fillRect(mainResultsX - 10, mainResultsY - 10, 420, 270);
   // Печатаем текст
-  var messageStats = 'Ура Вы победили!\nСписок результатов:'.split('\n');
+  var messageArray = message.split('\n');
   ctx.font = '16px Pt Mono';
   ctx.fillStyle = '#000';
-  for (var stringIndex = 0; stringIndex < messageStats.length; stringIndex++) {
-    ctx.fillText(messageStats[stringIndex], 120, 40 + stringIndex * 20, 380);
+  for (var stringIndex = 0; stringIndex < messageArray.length; stringIndex++) {
+    ctx.fillText(messageArray[stringIndex], 120, 40 + stringIndex * 20, 380);
   }
-  // Прочитаем массив со временем и вычислим максимальное время - самая высокая гистограмма на будущем графике
-  for (var namesIndex = 1; namesIndex < names.length; namesIndex++) {
-    if (times[namesIndex] > maxTime) {
-      maxTime = times[namesIndex];
+  // функция возвращает делитель для отрисовки диаграммы
+  var getDevider = function (heightPx) {
+    var maxTime = times[0];
+    for (var i = 1; i < names.length; i++) {
+      if (times[i] > maxTime) {
+        maxTime = times[i];
+      }
     }
-  }
-  // высота гистограммы задана в 150px, значения в игре имеют другую систему исчисления. Получаем пропорцию для отрисовки
-  chartDeviderConst = Math.round(maxTime / 150);
-  var figureDistance = 90; // ширина столбика 40px + расстояние между ними 50px. Константа участвует в вычислении положения следующего столбика
-  var chartItemHeight;
-
+    return Math.round(maxTime / heightPx);
+  };
+  // высота гистограммы задана в 150px, Результаты игроков имеют другую систему исчисления. Получаем пропорцию для отрисовки гистограммы результатов
+  var chartDevider = getDevider(heightDiagram);
+  // Вычисляем отступ по оси Х между соседними столбиками диаграммы
+  var nextBarX = barWidth + spaceBetweenBar;
+  // Переменная для хранения высоты столбика диаграммы
+  var heightCurrentBar;
+  // Функция вычисляет произвольную насыщенность цвета в rgb()
+  var getColorSaturation = function () {
+    return Math.ceil(Math.random() * 255);
+  };
+  // Рисуем диаграмму с результатами игроков
   for (var i = 0; i < names.length; i++) {
-    chartItemHeight = times[i] / chartDeviderConst;
-    ctx.fillStyle = 'rgb(0, 0, ' + Math.ceil(Math.random() * 255) + ')';// задаем рандом на насыщенность синим
-    if (names[i] === 'Вы') {
+    heightCurrentBar = times[i] / chartDevider;
+    ctx.fillStyle = 'rgb(0, 0, ' + getColorSaturation() + ')';
+    // Цвет диаграммы результатов текущего игрока устанавливаем красным
+    if (names[i] === currentPlayerName) {
       ctx.fillStyle = 'rgba(255, 0, 0, 1)'
       ;
-    }// Наше значение устанавливаем красным
-    ctx.fillRect(160 + i * figureDistance, 240 - chartItemHeight, 40, chartItemHeight);// рисуем столбик гистограммы
+    }
+    var getTimeString = function (j) {
+      return Math.round(times[j]).toString();
+    };
+    ctx.fillRect(mainResultsX + 40 + i * nextBarX, 240 - heightCurrentBar, 40, heightCurrentBar);// рисуем столбик гистограммы
     ctx.fillStyle = '#000';// задаем цвет шрифта надписей
-    ctx.fillText(names[i], 160 + i * figureDistance + 20 - names[i].length / 2 * 8, 260);// подписываем количество очков/время игрока
-    ctx.fillText(Math.round(times[i]).toString(), 160 + i * figureDistance, 240 - chartItemHeight - 9);// подписываем имя игрока под его результатом
+    ctx.fillText(names[i], mainResultsX + 40 + i * nextBarX + 20 - names[i].length / 2 * 8, 260);// подписываем имя игрока под его результатом
+    ctx.fillText(getTimeString(i), mainResultsX + 40 + i * nextBarX, 240 - heightCurrentBar - 9);// подписываем количество очков/время игрока
   }
 
 
