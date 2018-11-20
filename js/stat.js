@@ -1,5 +1,25 @@
 'use strict';
 
+// Константы задания module2-task1:
+var HEIGHTDIAGRAM = 150;
+var message = 'Ура Вы победили!\nСписок результатов:';
+var BARWIDTH = 40;
+var SPACEBETWEENBAR = 50;
+var CURRENTPLAYERNAME = 'Вы';
+var MAINRESULTSX = 110;
+var MAINRESULTSY = 20;
+var MAINRESULTWIDTH = 420;
+var MAINRESULTHEIGHT = 270;
+var MINSATURATION = 0;
+var RESULTSHADOWX = 10;
+var RESULTSHADOWY = 10;
+var ROWHEIGHT = 20;
+var MESSAGEX = 120;
+var MESSAGEY = 40;
+var SYMBOLWIDHTPX = 8;
+var DIAGRAMPADDINGLEFT = 40;
+var SCORESTEXTMARGIN = 9;
+var DIAGRAMPADDINGBOTTOM = 30;
 // функция возвращает делитель для отрисовки диаграммы
 var getDevider = function (times, heightPx) {
   var maxTime = times[0];
@@ -22,26 +42,6 @@ var getTimeString = function (time) {
 };
 
 window.renderStatistics = function (ctx, names, times) {
-  // Вводные данные задания module2-task1:
-  var HEIGHTDIAGRAM = 150;
-  var message = 'Ура Вы победили!\nСписок результатов:';
-  var BARWIDTH = 40;
-  var SPACEBETWEENBAR = 50;
-  var CURRENTPLAYERNAME = 'Вы';
-  var MAINRESULTSX = 110;
-  var MAINRESULTSY = 20;
-  var MAINRESULTWIDTH = 420;
-  var MAINRESULTHEIGHT = 270;
-  var MINSATURATION = 0;
-  var RESULTSHADOWX = 10;
-  var RESULTSHADOWY = 10;
-  var ROWHEIGHT = 20;
-  var MESSAGEX = 120;
-  var MESSAGEY = 40;
-  var SYMBOLWIDHTPX = 8;
-  var DIAGRAMPADDINGLEFT = 40;
-  var SCORESTEXTMARGIN = 9;
-  var DIAGRAMPADDINGBOTTOM = 30;
   // Рисуем поле для вывода результатов
   ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
   ctx.fillRect(MAINRESULTSX, MAINRESULTSY, MAINRESULTWIDTH, MAINRESULTHEIGHT);
