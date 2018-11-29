@@ -4,7 +4,7 @@
 var NUMBER_OF_PIRSONS = 4;
 var ENTER_CODE = 13;
 
-// task3 data
+// task4 data
 var PersonsData = {
   names: ['Иван', 'Хуан Себастьян', 'Мария', 'Кристоф', 'Виктор', 'Юлия', 'Люпита', 'Вашингтон'],
   surnames: ['да Марья', 'Верон', 'Мирабелла', 'Вальц', 'Онопко', 'Топольницкая', 'Нионго', 'Ирвинг'],
@@ -30,7 +30,6 @@ var nameSurnameReverse = function (names, surNames) {
   }
 };
 
-// function return random person specification in object
 var getRandomWizard = function (objPersons) {
   var personData = {
     name: nameSurnameReverse(objPersons.names, objPersons.surnames),
@@ -53,59 +52,54 @@ var pushWizardData = function (players) {
 
 };
 
+var setCoatColor = function () {
+  var colorCoat = setupWizardForm.querySelector('.setup-wizard .wizard-coat');
+  colorCoat.addEventListener('click', function () {
+    var coatInput = document.querySelector('.setup-wizard-appearance input:first-of-type');
+    var colorValue = getRandomItem(PersonsData.coatColors);
+    coatInput.value = colorValue;
+    colorCoat.style.fill = colorValue;
+  });
+};
+var setEyesColor = function () {
+  var colorEyes = setupWizardForm.querySelector('.setup-wizard .wizard-eyes');
+  colorEyes.addEventListener('click', function () {
+    var colorValue = getRandomItem(PersonsData.eyesColors);
+    var eyesInput = document.querySelector('.setup-wizard-appearance input:last-of-type');
+    eyesInput.value = colorValue;
+    colorEyes.style.fill = colorValue;
+  });
+};
+var setFireballColor = function () {
+  var colorFireball = setupWizardForm.querySelector('.setup-fireball-wrap');
+  colorFireball.addEventListener('click', function () {
+    var colorValue = getRandomItem(PersonsData.fireBoals);
+    colorFireball.querySelector('input').value = colorValue;
+    colorFireball.style.backgroundColor = colorValue;
+  });
+};
+
+
 var openSetupWizard = function () {
-  var setupWizardForm = document.querySelector('.overlay');
   setupWizardForm.classList.remove('hidden');
 
   var cross = setupWizardForm.querySelector('.setup-close');
   cross.addEventListener('click', function () {
     closeSetupWizard();
   });
-  addKeysListener();
-  someObjectFocusKeydownHandler(cross, ENTER_CODE, closeSetupWizard);
-
 
   var submitSetupForm = function () {
     var setupForm = document.querySelector('.setup-wizard-form');
     setupForm.submit();
   };
-  // console.log(setupForm);
+
   var submitButton = document.querySelector('.setup-submit');
-  someObjectFocusKeydownHandler(submitButton, ENTER_CODE, submitSetupForm);
-
-  var addColorCoatClickHandler = function () {
-    var colorCoat = setupWizardForm.querySelector('.setup-wizard .wizard-coat');
-    colorCoat.addEventListener('click', function () {
-      var coatInput = document.querySelector('.setup-wizard-appearance input:first-of-type');
-      var colorValue = getRandomItem(PersonsData.coatColors);
-      coatInput.value = colorValue;
-      colorCoat.style.fill = colorValue;
-    });
-  };
-
-  var addColorEyesClickHandler = function () {
-    var colorEyes = setupWizardForm.querySelector('.setup-wizard .wizard-eyes');
-    colorEyes.addEventListener('click', function () {
-      var colorValue = getRandomItem(PersonsData.eyesColors);
-      var eyesInput = document.querySelector('.setup-wizard-appearance input:last-of-type');
-      eyesInput.value = colorValue;
-      colorEyes.style.fill = colorValue;
-    });
-  };
-
-  var addColorFireballsClickHandler = function () {
-    var colorFireball = setupWizardForm.querySelector('.setup-fireball-wrap');
-    colorFireball.addEventListener('click', function () {
-      var colorValue = getRandomItem(PersonsData.fireBoals);
-      colorFireball.querySelector('input').value = colorValue;
-      colorFireball.style.backgroundColor = colorValue;
-    });
-  };
-  // fireBoals
-
-  addColorCoatClickHandler();
-  addColorEyesClickHandler();
-  addColorFireballsClickHandler();
+  setFocusKeydownEvent(submitButton, ENTER_CODE, submitSetupForm);
+  addKeysEvents();
+  setFocusKeydownEvent(cross, ENTER_CODE, closeSetupWizard);
+  setCoatColor();
+  setEyesColor();
+  setFireballColor();
 };
 
 var closeSetupWizard = function () {
@@ -119,28 +113,28 @@ var doEscButtonCheck = function (evt) {
   }
 };
 
-var addKeysListener = function () {
-  var addDocumentEscClickHeandler = function () {
+var addKeysEvents = function () {
+  var escClickHeandler = function () {
     document.addEventListener('keydown', doEscButtonCheck);
   };
 
-  var removeDocumentEscClickHeandler = function () {
+  var removeEscClickHeandler = function () {
     document.removeEventListener('keydown', doEscButtonCheck);
   };
 
-  addDocumentEscClickHeandler();
-
   var nameSetup = document.querySelector('.setup-user-name');
+
+  escClickHeandler();
   nameSetup.addEventListener('focus', function () {
-    removeDocumentEscClickHeandler();
+    removeEscClickHeandler();
   });
   nameSetup.addEventListener('blur', function () {
-    addDocumentEscClickHeandler();
+    escClickHeandler();
   });
 
 };
 
-var someObjectFocusKeydownHandler = function (object, key, funct) {
+var setFocusKeydownEvent = function (object, key, funct) {
   object.addEventListener('focus', function () {
     document.addEventListener('keydown', function (evt) {
 
@@ -151,36 +145,21 @@ var someObjectFocusKeydownHandler = function (object, key, funct) {
   });
 };
 
-// var makeSubmitDisable = function () {
+var setupWizardForm = document.querySelector('.overlay');
 
-// };
-
-// var wizardNameInput = document.querySelector('.setup-user-name');
-// wizardNameInput.addEventListener('invalid', makeSubmitDisable);
-
-// if browser knows content
 if ('content' in document.createElement('template')) {
   var setupDiv = document.querySelector('.setup-open');
-  setupDiv.addEventListener('click', function () { // var addSetupDivClickHandler =
+  setupDiv.addEventListener('click', function () {
     openSetupWizard();
-    // console.log(setupWizardForm.classList);
   });
-  /* var submitButton = document.querySelector('.setup-submit');
-  submitButton.addEventListener('click', function (evt) {
-
-  });*/
 
   var setupIcon = document.querySelector('.setup-open-icon');
-  someObjectFocusKeydownHandler(setupIcon, ENTER_CODE, openSetupWizard);
+  setFocusKeydownEvent(setupIcon, ENTER_CODE, openSetupWizard);
 
-  // var hiddenObj = document.querySelector('.hidden');
-  // hiddenObj.classList.remove('hidden');
   var fragment = document.querySelector('#similar-wizard-template').content;
   var randPersons = [];
   for (var i = 0; i < NUMBER_OF_PIRSONS; i++) {
     randPersons[i] = getRandomWizard(PersonsData);
     pushWizardData(randPersons[i]);
   }
-  // var hiddenDiv = document.querySelector('.setup-similar');
-  // hiddenDiv.classList.remove('hidden');
 }
