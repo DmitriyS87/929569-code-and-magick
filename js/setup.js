@@ -79,6 +79,7 @@ var openSetupWizard = function () {
   var closeSetupWizard = function () {
     var setupWizardForm = document.querySelector('.overlay');
     setupWizardForm.classList.add('hidden');
+    setupWizardForm.dispatchEvent(closeSetupDialog);
   };
 
   var cross = setupWizardForm.querySelector('.setup-close');
@@ -204,3 +205,4 @@ for (var i = 0; i < NUMBER_OF_PIRSONS; i++) {
   pushWizardData(randPersons[i]);
 }
 
+var closeSetupDialog = new Event('setupdialogclosed');
