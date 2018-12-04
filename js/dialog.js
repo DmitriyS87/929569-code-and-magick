@@ -1,57 +1,78 @@
 'use strict';
 
-var startMousedownElement = document.querySelector('.upload');
+var startMousedownElement = document.querySelector('.upload input');
 var movingDialogContainer = document.querySelector('.overlay.setup');
 var movingObject = {};
 var MOVE_SENSIVITY = 3;
 var defaultPosition = {};
+var isDragged;
 
 var pictureMousedownHandler = function (evt) {
+
+  var inputClickHandler = function (evtClick) {
+    evtClick.preventDefault();
+    return startMousedownElement.removeEventListener('click', inputClickHandler);
+  };
 
   movingObject.downX = evt.clientX;
   movingObject.downY = evt.clientY;
 
-  document.addEventListener('mousemove', dialogMousemoveHandler);
-};
-startMousedownElement.addEventListener('mousedown', pictureMousedownHandler);
+  isDragged = false;
 
-var dialogMousemoveHandler = function (evt) {
+  defaultPosition.x = parseInt(getComputedStyle(movingDialogContainer).left, 10);
+  defaultPosition.y = parseInt(getComputedStyle(movingDialogContainer).top, 10);
 
-  if (!movingObject.avatar) {
-    var moveX = evt.clientX - movingObject.downX;
-    var moveY = evt.clientY - movingObject.downY;
-    if (Math.abs(moveX) < MOVE_SENSIVITY && Math.abs(moveY) < MOVE_SENSIVITY) {
-      return;
+  movingObject.shiftX = movingObject.downX - defaultPosition.x;
+  movingObject.shiftY = movingObject.downY - defaultPosition.y;
+
+  var dialogMousemoveHandler = function (evtMove) {
+
+    if (!isDragged) {
+
+      var moveX = evtMove.clientX - movingObject.downX;
+      var moveY = evtMove.clientY - movingObject.downY;
+
+      if (Math.abs(moveX) < MOVE_SENSIVITY && Math.abs(moveY) < MOVE_SENSIVITY) {
+        return;
+      } else {
+        isDragged = true;
+      }
+
+      movingDialogContainer.style.zIndex = 9999;
+      movingDialogContainer.style.position = 'absolute';
+
+
     }
 
-    movingObject.avatar = movingDialogContainer.cloneNode(true);
-    movingDialogContainer.classList.add('hidden');
-    var parentElement = movingDialogContainer.parentNode;
-    defaultPosition.x = parentElement.clientWidth * parseInt(getComputedStyle(movingDialogContainer).left, 10) / 100;
-    defaultPosition.y = parseInt(getComputedStyle(movingDialogContainer).top, 10);
-    movingObject.shiftX = movingObject.downX - defaultPosition.x;
-    movingObject.shiftY = movingObject.downY - defaultPosition.y;
-    document.body.appendChild(movingObject.avatar);
-    movingObject.avatar.style.zIndex = 9999;
-    movingObject.avatar.style.position = 'absolute';
-  }
+    movingObject.moveX = evtMove.clientX - movingObject.shiftX;
+    movingObject.moveY = evtMove.clientY - movingObject.shiftY;
 
-  movingObject.avatar.style.left = evt.clientX - movingObject.shiftX + 'px';
-  movingObject.avatar.style.top = evt.clientY - movingObject.shiftY + 'px';
+    movingDialogContainer.style.left = movingObject.moveX + 'px';
+    movingDialogContainer.style.top = movingObject.moveY + 'px';
+
+
+  };
+
+
+  document.addEventListener('mousemove', dialogMousemoveHandler);
+
+  var dialogMouseupHandler = function () {
+
+    if (isDragged) {
+      movingDialogContainer.style.left = movingObject.moveX;
+      movingDialogContainer.style.top = movingObject.moveY;
+      startMousedownElement.addEventListener('click', inputClickHandler);
+    }
+
+    isDragged = false;
+    document.removeEventListener('mousemove', dialogMousemoveHandler);
+    document.removeEventListener('mouseup', dialogMouseupHandler);
+  };
   document.addEventListener('mouseup', dialogMouseupHandler);
 };
 
-var dialogMouseupHandler = function () {
-  if (movingObject.avatar) {
-    movingDialogContainer.style.left = movingObject.avatar.style.left;
-    movingDialogContainer.style.top = movingObject.avatar.style.top;
-    movingObject.avatar.remove();
-    movingDialogContainer.classList.remove('hidden');
-    document.removeEventListener('mousemove', dialogMousemoveHandler);
-  }
-  movingObject.avatar = '';
+startMousedownElement.addEventListener('mousedown', pictureMousedownHandler);
 
-};
 
 var setDefaultMovinDialogXY = function () {
   movingDialogContainer.removeAttribute('style');
