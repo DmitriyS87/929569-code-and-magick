@@ -8,7 +8,6 @@ var defaultPosition = {};
 var isDragged;
 
 var pictureMousedownHandler = function (evt) {
-
   var inputClickHandler = function (evtClick) {
     evtClick.preventDefault();
     return startMousedownElement.removeEventListener('click', inputClickHandler);

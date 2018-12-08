@@ -1,11 +1,9 @@
 'use strict';
 
-// Constants
 var NUMBER_OF_PIRSONS = 4;
 var ENTER_CODE = 13;
 var ESC_CODE = 27;
 
-// task4 data
 var PersonsData = {
   names: ['Иван', 'Хуан Себастьян', 'Мария', 'Кристоф', 'Виктор', 'Юлия', 'Люпита', 'Вашингтон'],
   surnames: ['да Марья', 'Верон', 'Мирабелла', 'Вальц', 'Онопко', 'Топольницкая', 'Нионго', 'Ирвинг'],
@@ -52,26 +50,6 @@ var pushWizardData = function (players) {
   insertPlace.appendChild(clone);
 
 };
-/*
-var EnterKeydownHandler = function (evt) {
-  if (evt.keyCode === ENTER_CODE) {
-    if (document.activeElement === evt.originalTarget) {
-      funct();
-    }
-  }
-};
-*/
-/*
-var setKeydownEvent = function (object, key, funct) {
-  object.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === key) {
-      if (document.activeElement === evt.originalTarget) {
-        funct();
-      }
-    }
-  });
-};
-*/
 
 var openSetupWizard = function () {
   setupWizardForm.classList.remove('hidden');
@@ -92,17 +70,16 @@ var openSetupWizard = function () {
     var colorValue = getRandomItem(PersonsData.coatColors);
     coatInput.value = colorValue;
     colorCoat.style.fill = colorValue;
-
   };
 
 
   var addKeysEvents = function () {
     var escClickHeandler = function () {
-      document.addEventListener('keydown', EscKeydownHandler);
+      document.addEventListener('keydown', EscKeyDownHandler);
     };
 
     var removeEscClickHeandler = function () {
-      document.removeEventListener('keydown', EscKeydownHandler);
+      document.removeEventListener('keydown', EscKeyDownHandler);
     };
 
     var nameSetup = document.querySelector('.setup-user-name');
@@ -123,7 +100,7 @@ var openSetupWizard = function () {
 
   var submitKeydownHandler = function (evt) {
     if (evt.keyCode === ENTER_CODE) {
-      if (document.activeElement === evt.originalTarget) {
+      if (document.activeElement === evt.target) {
         submitSetupForm();
       }
     }
@@ -135,7 +112,7 @@ var openSetupWizard = function () {
 
   var crossKeydownHandler = function (evt) {
     if (evt.keyCode === ENTER_CODE) {
-      if (document.activeElement === evt.originalTarget) {
+      if (document.activeElement === evt.target) {
         closeSetupWizard();
       }
     }
@@ -166,7 +143,7 @@ var openSetupWizard = function () {
   colorFireball.addEventListener('click', fireballClickHandler);
 
 
-  var EscKeydownHandler = function (evt) {
+  var EscKeyDownHandler = function (evt) {
     if (evt.keyCode === ESC_CODE) {
       closeSetupWizard();
     }
@@ -190,7 +167,7 @@ var setupIcon = document.querySelector('.setup-open-icon');
 
 var setupIconKeydownHandler = function (evt) {
   if (evt.keyCode === ENTER_CODE) {
-    if (document.activeElement === evt.originalTarget) {
+    if (document.activeElement === evt.target) {
       openSetupWizard();
     }
   }
