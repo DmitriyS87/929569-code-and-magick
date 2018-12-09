@@ -1,28 +1,35 @@
 'use strict';
-
-var startMousedownElement = document.querySelector('.upload input');
-var movingDialogContainer = document.querySelector('.overlay.setup');
-var movingObject = {};
 var MOVE_SENSIVITY = 3;
+
+
+var movingObject = {};
 var defaultPosition = {};
-var isDragged;
 
 var pictureMousedownHandler = function (evt) {
+  var isDragged = true;
+  var movingDialogContainer = document.querySelector('.overlay.setup');
+
   var inputClickHandler = function (evtClick) {
     evtClick.preventDefault();
     return startMousedownElement.removeEventListener('click', inputClickHandler);
   };
 
-  movingObject.downX = evt.clientX;
-  movingObject.downY = evt.clientY;
+  movingObject = {
+    downX: evt.clientX,
+    downY: evt.clientY
+  };
 
   isDragged = false;
 
-  defaultPosition.x = parseInt(getComputedStyle(movingDialogContainer).left, 10);
-  defaultPosition.y = parseInt(getComputedStyle(movingDialogContainer).top, 10);
+  defaultPosition = {
+    x: parseInt(getComputedStyle(movingDialogContainer).left, 10),
+    y: parseInt(getComputedStyle(movingDialogContainer).top, 10)
+  };
 
-  movingObject.shiftX = movingObject.downX - defaultPosition.x;
-  movingObject.shiftY = movingObject.downY - defaultPosition.y;
+  var differenceCords = {
+    shiftX: movingObject.downX - defaultPosition.x,
+    shiftY: movingObject.downY - defaultPosition.y
+  };
 
   var dialogMousemoveHandler = function (evtMove) {
 
@@ -39,28 +46,25 @@ var pictureMousedownHandler = function (evt) {
 
       movingDialogContainer.style.zIndex = 9999;
       movingDialogContainer.style.position = 'absolute';
-
-
     }
 
-    movingObject.moveX = evtMove.clientX - movingObject.shiftX;
-    movingObject.moveY = evtMove.clientY - movingObject.shiftY;
+    moveX = evtMove.clientX - differenceCords.shiftX;
+    moveY = evtMove.clientY - differenceCords.shiftY;
 
-    movingDialogContainer.style.left = movingObject.moveX + 'px';
-    movingDialogContainer.style.top = movingObject.moveY + 'px';
-
+    movingDialogContainer.style.left = moveX + 'px';
+    movingDialogContainer.style.top = moveY + 'px';
 
   };
-
 
   document.addEventListener('mousemove', dialogMousemoveHandler);
 
   var dialogMouseupHandler = function () {
 
     if (isDragged) {
-      movingDialogContainer.style.left = movingObject.moveX;
-      movingDialogContainer.style.top = movingObject.moveY;
       startMousedownElement.addEventListener('click', inputClickHandler);
+    } else {
+      movingDialogContainer.style.left = defaultPosition.x;
+      movingDialogContainer.style.top = defaultPosition.y;
     }
 
     isDragged = false;
@@ -70,11 +74,12 @@ var pictureMousedownHandler = function (evt) {
   document.addEventListener('mouseup', dialogMouseupHandler);
 };
 
+var startMousedownElement = document.querySelector('.upload input');
 startMousedownElement.addEventListener('mousedown', pictureMousedownHandler);
 
 
 var setDefaultMovinDialogXY = function () {
-  movingDialogContainer.removeAttribute('style');
+  document.querySelector('.overlay.setup').removeAttribute('style');
 };
 
 var setupWizardForm = document.querySelector('.overlay');

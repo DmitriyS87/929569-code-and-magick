@@ -75,11 +75,11 @@ var openSetupWizard = function () {
 
   var addKeysEvents = function () {
     var escClickHeandler = function () {
-      document.addEventListener('keydown', EscKeyDownHandler);
+      document.addEventListener('keydown', escKeyDownHandler);
     };
 
     var removeEscClickHeandler = function () {
-      document.removeEventListener('keydown', EscKeyDownHandler);
+      document.removeEventListener('keydown', escKeyDownHandler);
     };
 
     var nameSetup = document.querySelector('.setup-user-name');
@@ -143,7 +143,7 @@ var openSetupWizard = function () {
   colorFireball.addEventListener('click', fireballClickHandler);
 
 
-  var EscKeyDownHandler = function (evt) {
+  var escKeyDownHandler = function (evt) {
     if (evt.keyCode === ESC_CODE) {
       closeSetupWizard();
     }
@@ -166,10 +166,8 @@ setupDiv.addEventListener('click', function () {
 var setupIcon = document.querySelector('.setup-open-icon');
 
 var setupIconKeydownHandler = function (evt) {
-  if (evt.keyCode === ENTER_CODE) {
-    if (document.activeElement === evt.target) {
-      openSetupWizard();
-    }
+  if (evt.keyCode === ENTER_CODE && document.activeElement === evt.target) {
+    openSetupWizard();
   }
 };
 
