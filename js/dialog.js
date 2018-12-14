@@ -1,14 +1,12 @@
 'use strict';
+var MOVE_SENSIVITY = 3;
+
 
 var dialogSetupContainer = document.querySelector('.overlay.setup');
 var artifactsShopElements = document.querySelector('.setup-artifacts-shop').children;
 var setupedArtifactsElements = document.querySelector('.setup-artifacts').children;
 
 var dragAndDropElement = function (movingElement) {
-  var MOVE_SENSIVITY = 3;
-
-  var movingObject = {};
-  var defaultPosition = {};
 
   var pictureMousedownHandler = function (evt) {
     var isDragged = true;
@@ -18,14 +16,14 @@ var dragAndDropElement = function (movingElement) {
       return startMousedownElement.removeEventListener('click', inputClickHandler);
     };
 
-    movingObject = {
+    var movingObject = {
       downX: evt.clientX,
       downY: evt.clientY
     };
 
     isDragged = false;
 
-    defaultPosition = {
+    var defaultPosition = {
       x: parseInt(getComputedStyle(movingElement).left, 10),
       y: parseInt(getComputedStyle(movingElement).top, 10)
     };
@@ -44,9 +42,8 @@ var dragAndDropElement = function (movingElement) {
 
         if (Math.abs(moveX) < MOVE_SENSIVITY && Math.abs(moveY) < MOVE_SENSIVITY) {
           return;
-        } else {
-          isDragged = true;
         }
+        isDragged = true;
 
         movingElement.style.zIndex = 9999;
         movingElement.style.position = 'absolute';
