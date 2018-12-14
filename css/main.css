@@ -34,7 +34,8 @@ button
 
 *[tabindex]:focus,
 button:focus,
-input:focus
+input:focus,
+.enter
 {
     outline: none;
     box-shadow: 0 0 10px #fff000;
