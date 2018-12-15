@@ -125,17 +125,18 @@ var artBoxDropHandler = function (evtDrop) {
 
 var setListenersToArt = function (boxesPlace, placeName) {
   for (var i = 0; i < boxesPlace.length; i++) {
-    var currentBox = boxesPlace[i].querySelector('.setup-artifacts-cell img');
-    boxesPlace[i].addEventListener('drop', artBoxDropHandler);
-    boxesPlace[i].addEventListener('dragover', artBoxOverHandler);
-    boxesPlace[i].addEventListener('dragenter', artBoxEnterHandler);
-    boxesPlace[i].addEventListener('dragleave', artBoxLeaveHandler);
-    if (currentBox) {
-      currentBox.addEventListener('dragstart', someArtStartHandler);
-      currentBox.setAttribute('id', '\'' + currentBox.alt + i + '\'');
-      currentBox.addEventListener('dragend', someArtEndHandler);
+    var boxPlace = boxesPlace[i];
+    var currentArt = boxPlace.querySelector('.setup-artifacts-cell img');
+    boxPlace.addEventListener('drop', artBoxDropHandler);
+    boxPlace.addEventListener('dragover', artBoxOverHandler);
+    boxPlace.addEventListener('dragenter', artBoxEnterHandler);
+    boxPlace.addEventListener('dragleave', artBoxLeaveHandler);
+    if (currentArt) {
+      currentArt.addEventListener('dragstart', someArtStartHandler);
+      currentArt.setAttribute('id', '\'' + currentArt.alt + i + '\'');
+      currentArt.addEventListener('dragend', someArtEndHandler);
     }
-    boxesPlace[i].setAttribute('id', placeName + i);
+    boxPlace.setAttribute('id', placeName + i);
   }
 };
 
