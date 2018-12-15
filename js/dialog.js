@@ -75,14 +75,14 @@ var dragAndDropElement = function (movingElement) {
   startMousedownElement.addEventListener('mousedown', pictureMousedownHandler);
 };
 
-var drugEl = null;
+var drugArt = null;
 
-var artDNDStartHandler = function (evtStart) {
+var someArtStartHandler = function (evtStart) {
   evtStart.target.style.zIndex = 9999;
   evtStart.target.style.position = 'absolute';
   evtStart.target.style.opacity = '0.4';
 
-  drugEl = evtStart.target;
+  drugArt = evtStart.target;
 
 
   evtStart.dataTransfer.setData('text/plain', evtStart.target.id);
@@ -90,7 +90,7 @@ var artDNDStartHandler = function (evtStart) {
   evtStart.dataTransfer.mozCursor = 'pointer';
 };
 
-var divOverHandler = function (evtOver) {
+var artBoxOverHandler = function (evtOver) {
   if (evtOver.preventDefault()) {
     evtOver.preventDefault();
   }
@@ -98,23 +98,23 @@ var divOverHandler = function (evtOver) {
   evtOver.dataTransfer.effectAllowed = 'move';
 };
 
-var divEnterHandler = function (evtOver) {
+var artBoxEnterHandler = function (evtOver) {
   evtOver.target.classList.add('enter');
 };
 
-var divLeaveHandler = function (evtLeave) {
+var artBoxLeaveHandler = function (evtLeave) {
   evtLeave.target.classList.remove('enter');
 };
 
-var artDNDEndHandler = function (evtEnd) {
+var someArtEndHandler = function (evtEnd) {
   evtEnd.target.removeAttribute('style');
 };
 
-var artDNDDropHandler = function (evtDrop) {
+var artBoxDropHandler = function (evtDrop) {
   evtDrop.stopPropagation();
   evtDrop.preventDefault();
   var data = evtDrop.dataTransfer.getData('text/plain');
-  if (drugEl !== evtDrop.target && drugEl.parentNode !== evtDrop.target) {
+  if (drugArt !== evtDrop.target && drugArt.parentNode !== evtDrop.target) {
     evtDrop.target.innerHTML = '';
     var dropElement = document.getElementById(data);
     evtDrop.target.appendChild(dropElement);
@@ -122,20 +122,20 @@ var artDNDDropHandler = function (evtDrop) {
   }
 };
 
-var setListenersToArt = function (parentDiv, name) {
-  var currentCell;
-  for (var i = 0; i < parentDiv.length; i++) {
-    currentCell = parentDiv[i].querySelector('.setup-artifacts-cell img');
-    parentDiv[i].addEventListener('drop', artDNDDropHandler);
-    parentDiv[i].addEventListener('dragover', divOverHandler);
-    parentDiv[i].addEventListener('dragenter', divEnterHandler);
-    parentDiv[i].addEventListener('dragleave', divLeaveHandler);
-    if (currentCell) {
-      currentCell.addEventListener('dragstart', artDNDStartHandler);
-      currentCell.setAttribute('id', '\'' + currentCell.alt + i + '\'');
-      currentCell.addEventListener('dragend', artDNDEndHandler);
+
+var setListenersToArt = function (boxesPlace, placeName) {
+  for (var i = 0; i < boxesPlace.length; i++) {
+    var currentBox = boxesPlace[i].querySelector('.setup-artifacts-cell img');
+    boxesPlace[i].addEventListener('drop', artBoxDropHandler);
+    boxesPlace[i].addEventListener('dragover', artBoxOverHandler);
+    boxesPlace[i].addEventListener('dragenter', artBoxEnterHandler);
+    boxesPlace[i].addEventListener('dragleave', artBoxLeaveHandler);
+    if (currentBox) {
+      currentBox.addEventListener('dragstart', someArtStartHandler);
+      currentBox.setAttribute('id', '\'' + currentBox.alt + i + '\'');
+      currentBox.addEventListener('dragend', someArtEndHandler);
     }
-    parentDiv[i].setAttribute('id', name + i);
+    boxesPlace[i].setAttribute('id', placeName + i);
   }
 };
 
